@@ -31,11 +31,20 @@ else:
         'fliers': []
     }]
     
-    box = ax.bxp(stats, patch_artist=True, showfliers=False)
+    # 修改前的程式碼：
+    # box = ax.bxp(stats, patch_artist=True, showfliers=False)
+    # plt.setp(box[0]['boxes'], facecolor='#A6CEE3', linewidth=2)
+    # plt.setp(box[0]['medians'], color='#E31A1C', linewidth=3)
+
+    # 修改後的程式碼：
+    box_plot_elements = ax.bxp(stats, patch_artist=True, showfliers=False)
     
-    # 美化
-    plt.setp(box[0]['boxes'], facecolor='#A6CEE3', linewidth=2)
-    plt.setp(box[0]['medians'], color='#E31A1C', linewidth=3)
+    # 直接從回傳的字典中存取元素
+    for box in box_plot_elements:
+        # 設定盒子顏色
+        plt.setp(box['boxes'], facecolor='#A6CEE3', linewidth=2)
+        # 設定中位數顏色
+        plt.setp(box['medians'], color='#E31A1C', linewidth=3)
     
     ax.set_ylabel("數值", fontsize=12)
     ax.grid(axis='y', linestyle='--', alpha=0.6)
@@ -47,4 +56,5 @@ else:
     fn = 'boxplot.png'
     plt.savefig(fn)
     with open(fn, "rb") as img:
+
         st.download_button(label="📥 下載圖表圖片", data=img, file_name=fn, mime="image/png")
